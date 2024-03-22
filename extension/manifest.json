@@ -1,0 +1,13 @@
+{
+    "name": "Transientoor Extension",
+    "description": "This extension allows for approvals and swaps to happen in one transaction",
+    "version": "1.0",
+    "manifest_version": 3,
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "background": {
+        "service_worker": "./dist/background.js"
+    }
+}
