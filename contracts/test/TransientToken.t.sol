@@ -17,12 +17,20 @@ contract TransientTokenTest is Test {
     }
 
     function test_transferfrom() public {
-        vm.startPrank(address(this));
-
         (bool result) = token.transferFrom(alice, bob, 10_000);
 
         assertEq(result, true);
         assertEq(token.allowance(alice, bob), 0);
+    }
+
+    function test_transfer() public {
+        vm.startPrank(alice);
+
+        (bool result) = token.transfer(bob, 10_000);
+
         vm.stopPrank();
+
+        assertEq(result, true);
+        assertEq(token.balanceOf(bob), 10_000);
     }
 }
