@@ -124,6 +124,7 @@ export function Page() {
             />
             <Button
               className="py-8 px-6 text-2xl"
+              // @ts-expect-error different types for simulate
               onClick={() => writeContract(transferFromData!.request)}
               disabled={transferFromData === undefined || writeIsPending}
             >
