@@ -1,0 +1,9 @@
+@openzeppelin/=lib/universal-router/node_modules/@openzeppelin/
+@uniswap/=lib/universal-router/node_modules/@uniswap/
+ds-test/=lib/solmate/lib/ds-test/src/
+forge-gas-snapshot/=lib/permit2/lib/forge-gas-snapshot/src/
+forge-std/=lib/forge-std/src/
+openzeppelin-contracts/=lib/permit2/lib/openzeppelin-contracts/
+permit2/=lib/permit2/
+solmate/=lib/solmate/src/
+universal-router/=lib/universal-router/
