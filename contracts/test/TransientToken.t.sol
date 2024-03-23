@@ -10,7 +10,7 @@ contract TransientTokenTest is Test {
     address alice;
     address bob;
     function setUp() public {
-         token = new TransientToken("test","TT");
+        token = new TransientToken("test token","TT");
         alice = makeAddr("alice");
         bob = makeAddr("bob");
         token.mint(alice,10_000);
@@ -19,15 +19,9 @@ contract TransientTokenTest is Test {
 
     function test_transferfrom() public {
         vm.startPrank(address(this));
-        token.transferFrom(alice,bob,10_000);
+        (bool result) =token.transferFrom(alice,bob,10_000);
+        assertEq(result, true);
         vm.stopPrank();
     }
 
-    // function test_allowance() public {
-    //     vm.startPrank(alice);
-    //     token.approve(bob,100);
-    //     token.allowances(alice,bob);
-
-    //     vm.stopPrank();
-    // }
 }
