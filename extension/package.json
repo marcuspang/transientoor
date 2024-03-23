@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "yarn clean && npx webpack --config webpack.config.js",
+    "build:extension": "sh build.sh",
     "clean": "rm -rf dist"
   },
   "keywords": [],

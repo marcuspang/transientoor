@@ -7,8 +7,9 @@ import {
   UniswapTrade,
 } from "@uniswap/universal-router-sdk";
 import { Route as RouteV3, Trade as V3Trade } from "@uniswap/v3-sdk";
-import { BigNumber, ethers } from "ethers";
+import { BigNumber } from "ethers";
 import {
+  EIP1193Provider,
   Hash,
   decodeAbiParameters,
   decodeFunctionData,
@@ -23,8 +24,10 @@ import {
   FEE_AMOUNT,
   buildTrade,
   fromReadableAmount,
+  getClient,
   getPermitSignature,
   getPool,
+  signer,
 } from "./utils";
 
 // const account = privateKeyToAccount(
@@ -65,7 +68,7 @@ async function swapWithoutApproval() {
     token1,
     token2,
     FEE_AMOUNT,
-    client,
+    signer,
     "0xE836E7BE96912ed5215b1eb5eEf49269a43E7015"
   );
 
@@ -102,7 +105,7 @@ async function swapWithoutApproval() {
   const sig = await getPermitSignature(
     permit,
     address.toLowerCase() as `0x${string}`,
-    client,
+    signer,
     PERMIT2_ADDRESS,
     chainId
   );
@@ -152,7 +155,7 @@ async function swapWithoutApproval() {
     planner.inputs[1]
   );
 
-  const tx = await client.sendTransaction({
+  const tx = await signer.sendTransaction({
     data: encodeFunctionData({
       abi: parseAbi(["function execute(bytes,bytes[],uint256)"]),
       args: [

@@ -100,6 +100,75 @@ export const FEE_AMOUNT = FeeAmount.MEDIUM;
 // }
 
 let client: WalletClient<Transport, Chain, Account>;
+export let signer: Signer;
+
+function countDecimals(x: number) {
+  if (Math.floor(x) === x) {
+    return 0;
+  }
+  return x.toString().split(".")[1].length || 0;
+}
+
+export function fromReadableAmount(amount: number, decimals: number): JSBI {
+  const extraDigits = Math.pow(10, countDecimals(amount));
+  const adjustedAmount = amount * extraDigits;
+  return JSBI.divide(
+    JSBI.multiply(
+      JSBI.BigInt(adjustedAmount),
+      JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(decimals))
+    ),
+    JSBI.BigInt(extraDigits)
+  );
+}
+
+// export async function generateRoute(
+//   address: string,
+//   inputToken: Token,
+//   inputAmount: number,
+//   outputToken: Token,
+//   chainId: number
+// ): Promise<SwapRoute | null> {
+//   const router = new AlphaRouter({
+//     chainId,
+//     provider: client as unknown as BaseProvider,
+//   });
+
+//   const options: SwapOptionsSwapRouter02 = {
+//     recipient: address,
+//     slippageTolerance: new Percent(50, 10_000),
+//     deadline: Math.floor(Date.now() / 1000 + 1800),
+//     type: SwapType.SWAP_ROUTER_02,
+//   };
+
+//   const route = await router.route(
+//     CurrencyAmount.fromRawAmount(
+//       inputToken,
+//       fromReadableAmount(inputAmount, inputToken.decimals).toString()
+//     ),
+//     outputToken,
+//     TradeType.EXACT_INPUT,
+//     options
+//   );
+
+//   return route;
+// }
+
+// export async function executeRoute(
+//   route: SwapRoute,
+//   swapRouter02Address: `0x${string}`,
+//   walletAddress: `0x${string}`
+// ) {
+//   const res = await client.sendTransaction({
+//     data: route.methodParameters?.calldata as `0x${string}`,
+//     to: swapRouter02Address,
+//     value: route?.methodParameters?.value
+//       ? BigInt(route.methodParameters.value)
+//       : undefined,
+//     from: walletAddress,
+//   });
+
+//   return res;
+// }
 
 function countDecimals(x: number) {
   if (Math.floor(x) === x) {
@@ -197,6 +266,7 @@ export const getClient = async (chainId: number) => {
             chain,
             transport: custom(window.ethereum!),
           });
+          signer = clientToSigner(client);
           resolve(client);
         } else if (attempts >= maxAttempts) {
           clearInterval(intervalId);
@@ -432,6 +502,7 @@ export async function signPermit(
   // });
 
   // const ethersSigner = clientToSigner(signer);
+  // @ts-ignore
   const signature = await signer._signTypedData(
     eip712Domain,
     PERMIT2_PERMIT_TYPE,
