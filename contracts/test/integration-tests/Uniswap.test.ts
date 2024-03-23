@@ -2,24 +2,21 @@ import { TransactionReceipt } from "@ethersproject/abstract-provider";
 import type { Contract } from "@ethersproject/contracts";
 import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 import { CommandType, RoutePlanner } from "@uniswap/universal-router-sdk";
-import {
-  CONTRACT_BALANCE,
-  ETH_ADDRESS,
-  MAX_UINT160,
-} from "@uniswap/universal-router-sdk/dist/utils/constants";
 import { Pair } from "@uniswap/v2-sdk";
 import { FeeAmount } from "@uniswap/v3-sdk";
 import { expect } from "chai";
-import { BigNumberish } from "ethers";
-import { V2_EVENTS, V3_EVENTS, parseEvents } from "./shared/parseEvents";
-import { encodePath } from "./shared/swapRouter02Helpers";
-import { Permit2, UniversalRouter } from "../../typechain";
+import { BigNumber, BigNumberish } from "ethers";
 import hre from "hardhat";
+import { abi as TOKEN_ABI } from "../../artifacts/solmate/src/tokens/ERC20.sol/ERC20.json";
+import { Permit2, UniversalRouter } from "../../typechain-types";
 import {
   ADDRESS_THIS,
   ALICE_ADDRESS,
+  CONTRACT_BALANCE,
   DEADLINE,
+  ETH_ADDRESS,
   MAX_UINT,
+  MAX_UINT160,
   MSG_SENDER,
   ONE_PERCENT_BIPS,
   SOURCE_MSG_SENDER,
@@ -30,11 +27,14 @@ import deployUniversalRouter, {
 } from "./shared/deployUniversalRouter";
 import { expandTo18DecimalsBN, expandTo6DecimalsBN } from "./shared/helpers";
 import { DAI, USDC, USDT, WETH, resetFork } from "./shared/mainnetForkHelpers";
+import { V2_EVENTS, V3_EVENTS, parseEvents } from "./shared/parseEvents";
 import {
   PermitSingle,
   getPermitBatchSignature,
   getPermitSignature,
 } from "./shared/protocolHelpers/permit2";
+import { encodePath } from "./shared/swapRouter02Helpers";
+
 const { ethers } = hre;
 
 describe("Uniswap V2 and V3 Tests:", () => {
