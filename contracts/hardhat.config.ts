@@ -41,6 +41,21 @@ const config: HardhatUserConfig = {
           },
         },
       },
+      "src/TransientNFT.sol": {
+        version: "0.8.25",
+        settings: {
+          evmVersion: "cancun",
+          viaIR: true,
+          optimizer: {
+            enabled: true,
+            details: {
+              yulDetails: {
+                optimizerSteps: "u",
+              },
+            },
+          },
+        },
+      },
     },
   },
   networks: {
