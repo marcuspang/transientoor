@@ -1963,6 +1963,11 @@
     "@stablelib/random" "^1.0.2"
     "@stablelib/wipe" "^1.0.1"
 
+"@tanstack/history@1.15.13":
+  version "1.15.13"
+  resolved "https://registry.yarnpkg.com/@tanstack/history/-/history-1.15.13.tgz#544878665989e6ce07872378961fc6717d342682"
+  integrity sha512-ToaeMtK5S4YaxCywAlYexc7KPFN0esjyTZ4vXzJhXEWAkro9iHgh7m/4ozPJb7oTo65WkHWX0W9GjcZbInSD8w==
+
 "@tanstack/query-core@5.28.6":
   version "5.28.6"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.28.6.tgz#a3bdb108f9f8d4e2ba3163068dbe6ff55b905a81"
@@ -1974,6 +1979,54 @@
   integrity sha512-/DdYuDBSsA21Qbcder1R8Cr/3Nx0ZnA2lgtqKsLMvov8wL4+g0HBz/gWYZPlIsof7iyfQafyhg4wUVUsS3vWZw==
   dependencies:
     "@tanstack/query-core" "5.28.6"
+
+"@tanstack/react-router@1.22.3", "@tanstack/react-router@^1.22.3":
+  version "1.22.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-router/-/react-router-1.22.3.tgz#3cd1557581b4c9758622b3028779cc9508d7a534"
+  integrity sha512-z3UUmT/RrF/2P8rUNDbPwu7YL2gZnajXLVjXb7zOI8KV3aCdOWkyCTJf9snkWiOrTfh8zH4opdNPHZpqilH0Jw==
+  dependencies:
+    "@tanstack/history" "1.15.13"
+    "@tanstack/react-store" "^0.2.1"
+    tiny-invariant "^1.3.1"
+    tiny-warning "^1.0.3"
+
+"@tanstack/react-store@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-store/-/react-store-0.2.1.tgz#c1a04c85d403d842e56c6d0709211f013bdd1021"
+  integrity sha512-tEbMCQjbeVw9KOP/202LfqZMSNAVi6zYkkp1kBom8nFuMx/965Hzes3+6G6b/comCwVxoJU8Gg9IrcF8yRPthw==
+  dependencies:
+    "@tanstack/store" "0.1.3"
+    use-sync-external-store "^1.2.0"
+
+"@tanstack/router-devtools@^1.22.3":
+  version "1.22.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/router-devtools/-/router-devtools-1.22.3.tgz#a2f997d82881435d8db279ced5032b938257e53d"
+  integrity sha512-qc2JSIG4kOGTAaUai+h6evdRjYvGV0FYimQqg2PWV3rrwf1LNffB7axg/IQ//8J3cRx3NasrU3OLg9wcujzTVA==
+  dependencies:
+    "@tanstack/react-router" "1.22.3"
+    clsx "^2.1.0"
+    date-fns "^2.29.1"
+    goober "^2.1.14"
+
+"@tanstack/router-generator@1.20.5":
+  version "1.20.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/router-generator/-/router-generator-1.20.5.tgz#850d97b4b8581ba3cf3bede56ad60300bb09e1b2"
+  integrity sha512-rE0C4dvDMx/lT1mZghORQGCy1GCqwWcTBrO3ZuEHnswzVxBwKMZvFOw/7h5IZ3DkC2rkGXZaRM1JccgwvQDnvA==
+  dependencies:
+    prettier "^3.1.1"
+    zod "^3.22.4"
+
+"@tanstack/router-vite-plugin@^1.20.5":
+  version "1.20.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/router-vite-plugin/-/router-vite-plugin-1.20.5.tgz#108cab5159bf55d149da6c7f011eb62ee9121107"
+  integrity sha512-Opdw3y8MgaSI6KdUcI4k4PLYHhuB9Pn4RDxvLR0oVhzE9/n+bcK/aAz7U460cGR4ZR12cwcoZ0Dq56y8COUJQQ==
+  dependencies:
+    "@tanstack/router-generator" "1.20.5"
+
+"@tanstack/store@0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@tanstack/store/-/store-0.1.3.tgz#b8410435dac0a0f6d3fe77d49509f296905d4c73"
+  integrity sha512-GnolmC8Fr4mvsHE1fGQmR3Nm0eBO3KnZjDU0a+P3TeQNM/dDscFGxtA7p31NplQNW3KwBw4t1RVFmz0VeKLxcw==
 
 "@types/babel__core@^7.20.5":
   version "7.20.5"
@@ -3302,7 +3355,7 @@ d@1, d@^1.0.1, d@^1.0.2:
     es5-ext "^0.10.64"
     type "^2.7.2"
 
-date-fns@^2.29.3:
+date-fns@^2.29.1, date-fns@^2.29.3:
   version "2.30.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
   integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
@@ -4162,6 +4215,11 @@ globby@^13.2.2:
     ignore "^5.2.4"
     merge2 "^1.4.1"
     slash "^4.0.0"
+
+goober@^2.1.14:
+  version "2.1.14"
+  resolved "https://registry.yarnpkg.com/goober/-/goober-2.1.14.tgz#4a5c94fc34dc086a8e6035360ae1800005135acd"
+  integrity sha512-4UpC0NdGyAFqLNPnhCT2iHpza2q+RAY3GV85a/mRPdzyPQMsj0KmMMuetdIkzWRbJ+Hgau1EZztq8ImmiMGhsg==
 
 gopd@^1.0.1:
   version "1.0.1"
@@ -5435,7 +5493,7 @@ prelude-ls@^1.2.1:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prettier@^3.0.3:
+prettier@^3.0.3, prettier@^3.1.1:
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.2.5.tgz#e52bc3090586e824964a8813b09aba6233b28368"
   integrity sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==
@@ -6117,6 +6175,16 @@ thread-stream@^0.15.1:
   dependencies:
     real-require "^0.1.0"
 
+tiny-invariant@^1.3.1:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.3.3.tgz#46680b7a873a0d5d10005995eb90a70d74d60127"
+  integrity sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==
+
+tiny-warning@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
+  integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
+
 to-fast-properties@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-2.0.0.tgz#dc5e698cbd079265bc73e0377681a4e4e83f616e"
@@ -6300,7 +6368,7 @@ use-sidecar@^1.1.2:
     detect-node-es "^1.1.0"
     tslib "^2.0.0"
 
-use-sync-external-store@1.2.0:
+use-sync-external-store@1.2.0, use-sync-external-store@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
   integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
@@ -6640,7 +6708,7 @@ yocto-queue@^1.0.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-1.0.0.tgz#7f816433fb2cbc511ec8bf7d263c3b58a1a3c251"
   integrity sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==
 
-zod@3.22.4, zod@^3.22.2:
+zod@3.22.4, zod@^3.22.2, zod@^3.22.4:
   version "3.22.4"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.4.tgz#f31c3a9386f61b1f228af56faa9255e845cf3fff"
   integrity sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==
