@@ -29,4 +29,38 @@ contract TransientTokenTest is Test {
         transientNFT.safeTransferFrom(alice,bob,1,"");
     }
 
+    function test_lend() public {
+        address[] memory borrower = new address[](1);
+        borrower[0] = bob;
+        uint256[] memory tokenId = new uint256[](1);
+        tokenId[0] =1;
+        vm.prank(alice);
+        transientNFT.lend(borrower, tokenId);
+
+        assertEq(transientNFT.ownerOf(1),bob);
+    }
+
+    function test_claimbackNFT() public {
+          address[] memory borrower = new address[](1);
+        borrower[0] = bob;
+        uint256[] memory tokenId = new uint256[](1);
+        tokenId[0] =1;
+        vm.prank(alice);
+        transientNFT.lend(borrower, tokenId);
+        assertEq(transientNFT.ownerOf(1),bob);
+
+        vm.warp(block.timestamp + 1 days);
+        vm.expectRevert();
+
+         
+        vm.prank(alice);
+        transientNFT.claimBackNFT(tokenId);
+
+        vm.warp(block.timestamp + 14 days);
+        vm.prank(alice);
+        transientNFT.claimBackNFT(tokenId);
+
+        assertEq(transientNFT.ownerOf(1),alice);
+    }
+
 }
