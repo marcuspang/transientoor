@@ -10,6 +10,7 @@ import {
   Token,
   TradeType,
 } from "@uniswap/sdk-core";
+import { PERMIT2_ADDRESS } from "@uniswap/universal-router-sdk";
 import {
   Pair,
   Route as RouteV2,
@@ -290,3 +291,107 @@ export function buildTrade(
     tradeType: trades[0].tradeType,
   });
 }
+
+export async function getPermitSignature(
+  permit: PermitSingle,
+  address: `0x${string}`,
+  signer: WalletClient<Transport, Chain, Account>,
+  permit2Address: `0x${string}`,
+  chainId: number
+): Promise<string> {
+  const permit2 = getContract({
+    address: permit2Address,
+    abi: [
+      {
+        inputs: [
+          { internalType: "address", name: "", type: "address" },
+          { internalType: "address", name: "", type: "address" },
+          { internalType: "address", name: "", type: "address" },
+        ],
+        name: "allowance",
+        outputs: [
+          { internalType: "uint160", name: "amount", type: "uint160" },
+          { internalType: "uint48", name: "expiration", type: "uint48" },
+          { internalType: "uint48", name: "nonce", type: "uint48" },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+    ],
+    client: signer,
+  });
+  const [, , nextNonce] = await permit2.read.allowance([
+    address,
+    permit.details.token,
+    permit.spender,
+  ]);
+  permit.details.nonce = nextNonce;
+  return await signPermit(permit, signer, permit2Address, chainId);
+}
+
+export async function signPermit(
+  permit: PermitSingle,
+  signer: WalletClient<Transport, Chain, Account>,
+  verifyingContract: `0x${string}`,
+  chainId: number
+): Promise<string> {
+  const eip712Domain = getEip712Domain(chainId, verifyingContract);
+  const signature = await signer.signTypedData({
+    domain: eip712Domain,
+    types: PERMIT2_PERMIT_TYPE,
+    message: permit,
+    primaryType: "PermitSingle",
+  });
+
+  return signature;
+}
+
+export type PermitDetails = {
+  token: `0x${string}`;
+  amount: BigInt;
+  expiration: BigInt;
+  nonce: number;
+};
+
+export type PermitSingle = {
+  details: PermitDetails;
+  spender: `0x${string}`;
+  sigDeadline: BigInt;
+};
+
+export type PermitBatch = {
+  details: PermitDetails[];
+  spender: `0x${string}`;
+  sigDeadline: BigInt;
+};
+
+export type TransferDetail = {
+  from: string;
+  to: string;
+  amount: BigInt;
+  token: string;
+};
+
+export function getEip712Domain(
+  chainId: number,
+  verifyingContract: `0x${string}`
+) {
+  return {
+    name: "Permit2",
+    chainId,
+    verifyingContract,
+  };
+}
+export const PERMIT2_PERMIT_TYPE = {
+  PermitDetails: [
+    { name: "token", type: "address" },
+    { name: "amount", type: "uint160" },
+    { name: "expiration", type: "uint48" },
+    { name: "nonce", type: "uint48" },
+  ],
+  PermitSingle: [
+    { name: "details", type: "PermitDetails" },
+    { name: "spender", type: "address" },
+    { name: "sigDeadline", type: "uint256" },
+  ],
+};

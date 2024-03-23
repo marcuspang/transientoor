@@ -5,6 +5,9 @@ import {
   TradeType,
 } from "@uniswap/sdk-core";
 import {
+  CommandType,
+  PERMIT2_ADDRESS,
+  RoutePlanner,
   SwapRouter,
   UNIVERSAL_ROUTER_ADDRESS,
   UniswapTrade,
@@ -15,9 +18,18 @@ import {
   decodeFunctionData,
   encodeFunctionData,
   parseAbi,
+  parseEther,
 } from "viem";
 import { TOKENS, UNIVERSAL_ROUTER_ADDRESSES } from "./constants";
-import { FEE_AMOUNT, buildTrade, getClient, getPool } from "./utils";
+import {
+  FEE_AMOUNT,
+  buildTrade,
+  getClient,
+  getPermitSignature,
+  getPool,
+} from "./utils";
+import { signTypedData } from "viem/_types/accounts/utils/signTypedData";
+import { MSG_SENDER } from "@uniswap/router-sdk";
 
 let isButtonDisplayed = false;
 
@@ -29,10 +41,10 @@ async function swapWithoutApproval() {
   const client = await getClient(chainId);
   const [address] = await client.requestAddresses();
 
-  const universalRouterADdress = UNIVERSAL_ROUTER_ADDRESSES[
+  const universalRouterAddress = UNIVERSAL_ROUTER_ADDRESSES[
     chainId
   ] as `0x${string}`;
-  console.log({ swapRouter02Address: universalRouterADdress });
+  console.log({ swapRouter02Address: universalRouterAddress });
 
   const tokens = TOKENS[chainId];
   const token1 = tokens["TOKEN1"];
@@ -55,12 +67,54 @@ async function swapWithoutApproval() {
   });
   const { calldata, value } = SwapRouter.swapCallParameters(routerTrade);
 
+  const planner = new RoutePlanner();
+  const amount = parseEther("1");
+  const permit = {
+    details: {
+      token: token1.address as `0x${string}`,
+      amount,
+      expiration: BigInt(0), // expiration of 0 is block.timestamp
+      nonce: 0, // this is his first trade
+    },
+    spender: universalRouterAddress,
+    sigDeadline: BigInt(2000000000),
+  };
+  const sig = await getPermitSignature(
+    permit,
+    address,
+    client,
+    PERMIT2_ADDRESS,
+    chainId
+  );
+
+  planner.addCommand(CommandType.PERMIT2_PERMIT, [permit, sig]);
+  planner.addCommand(CommandType.V2_SWAP_EXACT_IN, [
+    MSG_SENDER,
+    amount,
+    parseEther("0"),
+    [token1.address, token2.address],
+    true,
+  ]);
   const tx = await client.sendTransaction({
     account: address,
-    data: calldata as `0x${string}`,
+    data: encodeFunctionData({
+      abi: parseAbi(["function execute(bytes,bytes[],uint256)"]),
+      args: [
+        planner.commands as `0x${string}`,
+        planner.inputs as `0x${string}`[],
+        BigInt((new Date().getTime() / 1000 + 1000).toFixed(0)),
+      ],
+    }),
     value: BigInt(value),
-    to: universalRouterADdress,
+    to: universalRouterAddress,
   });
+
+  // const tx = await client.sendTransaction({
+  //   account: address,
+  //   data: calldata as `0x${string}`,
+  //   value: BigInt(value),
+  //   to: universalRouterAddress,
+  // });
   console.log("Sending transaction...", tx);
   alert(`Transaction hash can be found at: ${tx}`);
 }
