@@ -10,7 +10,12 @@ import {
   Token,
   TradeType,
 } from "@uniswap/sdk-core";
-import { PERMIT2_ADDRESS } from "@uniswap/universal-router-sdk";
+// import {
+//   AlphaRouter,
+//   SwapOptionsSwapRouter02,
+//   SwapRoute,
+//   SwapType,
+// } from "@uniswap/smart-order-router";
 import {
   Pair,
   Route as RouteV2,
@@ -26,16 +31,17 @@ import {
   Trade as V3Trade,
   nearestUsableTick,
 } from "@uniswap/v3-sdk";
+import { BigNumber, Signer, ethers, providers } from "ethers";
 import JSBI from "jsbi";
 import {
   Account,
   Chain,
+  Client,
   Transport,
   WalletClient,
   createWalletClient,
   custom,
   getContract,
-  parseAbi,
 } from "viem";
 import { mainnet, optimism, sepolia } from "viem/chains";
 
@@ -94,6 +100,74 @@ export const FEE_AMOUNT = FeeAmount.MEDIUM;
 // }
 
 let client: WalletClient<Transport, Chain, Account>;
+
+function countDecimals(x: number) {
+  if (Math.floor(x) === x) {
+    return 0;
+  }
+  return x.toString().split(".")[1].length || 0;
+}
+
+export function fromReadableAmount(amount: number, decimals: number): JSBI {
+  const extraDigits = Math.pow(10, countDecimals(amount));
+  const adjustedAmount = amount * extraDigits;
+  return JSBI.divide(
+    JSBI.multiply(
+      JSBI.BigInt(adjustedAmount),
+      JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(decimals))
+    ),
+    JSBI.BigInt(extraDigits)
+  );
+}
+
+// export async function generateRoute(
+//   address: string,
+//   inputToken: Token,
+//   inputAmount: number,
+//   outputToken: Token,
+//   chainId: number
+// ): Promise<SwapRoute | null> {
+//   const router = new AlphaRouter({
+//     chainId,
+//     provider: client as unknown as BaseProvider,
+//   });
+
+//   const options: SwapOptionsSwapRouter02 = {
+//     recipient: address,
+//     slippageTolerance: new Percent(50, 10_000),
+//     deadline: Math.floor(Date.now() / 1000 + 1800),
+//     type: SwapType.SWAP_ROUTER_02,
+//   };
+
+//   const route = await router.route(
+//     CurrencyAmount.fromRawAmount(
+//       inputToken,
+//       fromReadableAmount(inputAmount, inputToken.decimals).toString()
+//     ),
+//     outputToken,
+//     TradeType.EXACT_INPUT,
+//     options
+//   );
+
+//   return route;
+// }
+
+// export async function executeRoute(
+//   route: SwapRoute,
+//   swapRouter02Address: `0x${string}`,
+//   walletAddress: `0x${string}`
+// ) {
+//   const res = await client.sendTransaction({
+//     data: route.methodParameters?.calldata as `0x${string}`,
+//     to: swapRouter02Address,
+//     value: route?.methodParameters?.value
+//       ? BigInt(route.methodParameters.value)
+//       : undefined,
+//     from: walletAddress,
+//   });
+
+//   return res;
+// }
 
 const supportedChains: Record<number, Chain> = {
   [sepolia.id]: sepolia,
@@ -163,6 +237,8 @@ export async function getPool(
   tokenA: Token,
   tokenB: Token,
   feeAmount: FeeAmount,
+  // client: WalletClient<Transport, Chain, Account>,
+  signer: Signer,
   poolAddress?: `0x${string}`
 ): Promise<Pool> {
   let tokenPoolAddress = poolAddress;
@@ -176,9 +252,9 @@ export async function getPool(
       feeAmount
     ) as `0x${string}`;
   }
-  const contract = getContract({
-    address: tokenPoolAddress,
-    abi: [
+  const contract = new ethers.Contract(
+    tokenPoolAddress,
+    [
       {
         name: "slot0",
         type: "function",
@@ -227,35 +303,26 @@ export async function getPool(
         ],
       },
     ],
-    client,
-  });
+    signer
+  );
   let sqrtPriceX96: bigint | JSBI;
   let tick: number;
-  let liquidity: bigint | JSBI = await contract.read.liquidity();
-  [sqrtPriceX96, tick] = await contract.read.slot0();
+  let liquidity: bigint | JSBI = await contract.liquidity();
+  [sqrtPriceX96, tick] = await contract.slot0();
   liquidity = JSBI.BigInt(liquidity.toString());
   sqrtPriceX96 = JSBI.BigInt(sqrtPriceX96.toString());
-  const tickCurrentSqrtRatioX96 = TickMath.getSqrtRatioAtTick(tick);
-  return new Pool(
-    token0,
-    token1,
-    feeAmount,
-    tickCurrentSqrtRatioX96,
-    liquidity,
-    tick,
-    [
-      {
-        index: nearestUsableTick(TickMath.MIN_TICK, TICK_SPACINGS[feeAmount]),
-        liquidityNet: liquidity,
-        liquidityGross: liquidity,
-      },
-      {
-        index: nearestUsableTick(TickMath.MAX_TICK, TICK_SPACINGS[feeAmount]),
-        liquidityNet: JSBI.multiply(liquidity, JSBI.BigInt("-1")),
-        liquidityGross: liquidity,
-      },
-    ]
-  );
+  return new Pool(token0, token1, feeAmount, sqrtPriceX96, liquidity, tick, [
+    {
+      index: nearestUsableTick(TickMath.MIN_TICK, TICK_SPACINGS[feeAmount]),
+      liquidityNet: liquidity,
+      liquidityGross: liquidity,
+    },
+    {
+      index: nearestUsableTick(TickMath.MAX_TICK, TICK_SPACINGS[feeAmount]),
+      liquidityNet: JSBI.multiply(liquidity, JSBI.BigInt("-1")),
+      liquidityGross: liquidity,
+    },
+  ]);
 }
 
 // alternative constructor to create from protocol-specific sdks
@@ -295,13 +362,13 @@ export function buildTrade(
 export async function getPermitSignature(
   permit: PermitSingle,
   address: `0x${string}`,
-  signer: WalletClient<Transport, Chain, Account>,
+  signer: Signer,
   permit2Address: `0x${string}`,
   chainId: number
 ): Promise<string> {
-  const permit2 = getContract({
-    address: permit2Address,
-    abi: [
+  const permit2 = new ethers.Contract(
+    permit2Address,
+    [
       {
         inputs: [
           { internalType: "address", name: "", type: "address" },
@@ -318,58 +385,86 @@ export async function getPermitSignature(
         type: "function",
       },
     ],
-    client: signer,
-  });
-  const [, , nextNonce] = await permit2.read.allowance([
+    signer
+  );
+  const [, , nextNonce] = await permit2.allowance(
     address,
     permit.details.token,
-    permit.spender,
-  ]);
+    permit.spender
+  );
   permit.details.nonce = nextNonce;
   return await signPermit(permit, signer, permit2Address, chainId);
 }
 
+export function clientToSigner(client: Client<Transport, Chain, Account>) {
+  const { account, chain, transport } = client;
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  };
+  const provider = new providers.Web3Provider(transport, network);
+  const signer = provider.getSigner(account.address);
+  return signer;
+}
+
 export async function signPermit(
   permit: PermitSingle,
-  signer: WalletClient<Transport, Chain, Account>,
+  signer: Signer,
   verifyingContract: `0x${string}`,
   chainId: number
 ): Promise<string> {
   const eip712Domain = getEip712Domain(chainId, verifyingContract);
-  const signature = await signer.signTypedData({
-    domain: eip712Domain,
-    types: PERMIT2_PERMIT_TYPE,
-    message: permit,
-    primaryType: "PermitSingle",
-  });
+  // const signature = await signer.signTypedData({
+  //   domain: eip712Domain,
+  //   types: PERMIT2_PERMIT_TYPE,
+  //   message: {
+  //     details: {
+  //       token: permit.details.token,
+  //       amount: permit.details.amount,
+  //       expiration: permit.details.expiration,
+  //       nonce: permit.details.nonce,
+  //     },
+  //     spender: permit.spender,
+  //     sigDeadline: permit.sigDeadline,
+  //   },
+  //   primaryType: "PermitSingle",
+  // });
+
+  // const ethersSigner = clientToSigner(signer);
+  const signature = await signer._signTypedData(
+    eip712Domain,
+    PERMIT2_PERMIT_TYPE,
+    permit
+  );
 
   return signature;
 }
 
 export type PermitDetails = {
   token: `0x${string}`;
-  amount: BigInt;
-  expiration: BigInt;
-  nonce: number;
+  amount: number | BigNumber;
+  expiration: number | BigNumber;
+  nonce: number | BigNumber;
 };
 
 export type PermitSingle = {
   details: PermitDetails;
   spender: `0x${string}`;
-  sigDeadline: BigInt;
+  sigDeadline: number | BigNumber;
 };
 
 export type PermitBatch = {
   details: PermitDetails[];
   spender: `0x${string}`;
-  sigDeadline: BigInt;
+  sigDeadline: number | BigNumber;
 };
 
 export type TransferDetail = {
-  from: string;
-  to: string;
-  amount: BigInt;
-  token: string;
+  from: `0x${string}`;
+  to: `0x${string}`;
+  amount: number | BigNumber;
+  token: `0x${string}`;
 };
 
 export function getEip712Domain(
@@ -378,7 +473,7 @@ export function getEip712Domain(
 ) {
   return {
     name: "Permit2",
-    chainId,
+    chainId: chainId,
     verifyingContract,
   };
 }

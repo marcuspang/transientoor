@@ -28,14 +28,16 @@ export const TOKENS: Record<Chain["id"], Record<string, Token>> = {
   [sepolia.id]: {
     TOKEN1: new Token(
       sepolia.id,
-      "0x5a38bb9d84febf451c18282767bb11119b1cad19",
+      // "0x5a38bb9d84febf451c18282767bb11119b1cad19",
+      "0x8Fe5263d0B1D14782Ef8204B26EE361e2C0BfCC6",
       18,
       "TT1",
       "TokenOne"
     ),
     TOKEN2: new Token(
       sepolia.id,
-      "0xfcd57f579733a96c97608d6c7ff3a93151f4cf0e",
+      // "0xfcd57f579733a96c97608d6c7ff3a93151f4cf0e",
+      "0x68be2bD28C06BF074f17dCd6F629C301772AE234",
       18,
       "TT2",
       "TokenTwo"
