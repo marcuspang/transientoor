@@ -9,6 +9,6 @@ EIP-1153 introduces transient storage to the Ethereum network, allowing storage 
 Transientoor achieves gas efficiency through the use of tload and tstore operations, each consuming 100 gas, to update the allowance of owner and spender pairs. This is a significant improvement over the conventional sload and store opcodes, which cost 20,000 gas (for setting a storage slot from 0 to non-zero) and 2,900 gas (for updating a non-zero value), respectively.
 
 # Development Overview
-/contracts: Contains Transientoor contracts, deployment scripts, deployment addresses, and Uniswap tests.
-/extension: Houses the browser extension designed for selecting Transientoor functionality during token swaps.
-/frontend: Includes the Uniswap frontend interface.
+1. `/contracts`: Contains Transientoor contracts, deployment scripts, deployment addresses, and Uniswap tests.    
+2. `/extension`: Houses the browser extension designed for selecting Transientoor functionality during token swaps.    
+3. `/frontend`: Includes the Uniswap frontend interface.
