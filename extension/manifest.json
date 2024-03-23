@@ -4,17 +4,34 @@
     "version": "1.0",
     "manifest_version": 3,
     "permissions": [
+        "scripting",
         "activeTab",
-        "scripting"
+        "webRequest"
     ],
     "content_scripts": [
         {
             "matches": [
-                "*://app.uniswap.org/*"
+                "http://*/*",
+                "https://*/*"
             ],
             "js": [
+                "dist/inject.js"
+            ],
+            "all_frames": true
+        }
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
                 "dist/background.js"
+            ],
+            "matches": [
+                "*://app.uniswap.org/*"
             ]
         }
-    ]
+    ],
+    "action": {}
 }
