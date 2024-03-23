@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@radix-ui/react-select";
+} from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Network, Nft } from "alchemy-sdk";
@@ -29,7 +29,11 @@ export function Index() {
   const [selectedNft, setSelectedNft] = useState<Nft>();
   const [fromAddress, setFromAddress] = useState<Address>();
   const [toAddress, setToAddress] = useState<Address>();
-  const { data, isPending: nftsIsPending } = useQuery({
+  const {
+    data,
+    isLoading: nftsIsPending,
+    fetchStatus: nftsIsFetching,
+  } = useQuery({
     queryKey: ["nfts", fromAddress],
     queryFn: () =>
       getUserNfts(
@@ -65,22 +69,33 @@ export function Index() {
 
   return (
     <div className="px-12 my-auto">
-      <div className="grid grid-cols-5 gap-4">
-        <div className="col-span-2 mt-8">
-          <Input
-            placeholder="Enter a user's address"
-            className="w-3/4 mb-6 mx-auto"
-            value={fromAddress}
-            defaultValue={fromAddress}
-            onChange={(e) => setFromAddress(e.target.value as Address)}
-          />
+      <div className="flex mt-4 space-x-4 w-3/4 mx-auto">
+        <Input
+          placeholder="From Address"
+          className="h-12"
+          value={fromAddress}
+          onChange={(e) => setFromAddress(e.target.value as Address)}
+        />
+        <Input
+          placeholder="To Address"
+          className="h-12"
+          value={toAddress}
+          onChange={(e) => setToAddress(e.target.value as Address)}
+        />
+      </div>
+      <div className="flex space-x-4 w-3/4 mx-auto">
+        <div className="mt-8 w-full">
           <Select
             onValueChange={(index) => setSelectedNft(data?.ownedNfts[+index])}
             disabled={nftsIsPending}
           >
-            <SelectTrigger className="w-3/4 mx-auto h-[52px]">
+            <SelectTrigger className="mx-auto h-[52px]">
               <SelectValue
-                placeholder={nftsIsPending ? "Loading..." : "Choose an NFT"}
+                placeholder={
+                  nftsIsPending && nftsIsFetching
+                    ? "Loading..."
+                    : "Choose an NFT"
+                }
                 className="py-2"
               />
             </SelectTrigger>
@@ -112,24 +127,17 @@ export function Index() {
             </div>
           )}
         </div>
-        <div className="col-span-3 mt-[30%] text-center">
-          <Input
-            type="text"
-            placeholder="Target Address"
-            className="mb-4 placeholder:text-lg py-8"
-            value={toAddress}
-            onChange={(e) => setToAddress(e.target.value as Address)}
-          />
+        <div className="text-center w-full mt-8">
           <Button
             className="py-8 px-6 text-2xl"
             // @ts-expect-error different types for simulate
             onClick={() => writeContract(transferFromData!.request)}
             disabled={transferFromData === undefined || writeIsPending}
           >
-            {writeIsPending ? "Sending..." : "Send Immediately"}
+            {writeIsPending ? "Retrieving..." : "Retrieve Immediately"}
           </Button>
           <p className="text-xs mt-2 tracking-tight text-black/50">
-            without approving the receipient :)
+            without needing an approval from borrower :)
           </p>
         </div>
       </div>

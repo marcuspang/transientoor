@@ -14,6 +14,9 @@ export const Route = createRootRoute({
               <Link to="/" className="[&.active]:font-bold">
                 Loan NFTs
               </Link>
+              <Link to="/swap" className="[&.active]:font-bold">
+                Swap ERC20s
+              </Link>
               <Link to="/about" className="[&.active]:font-bold">
                 About
               </Link>
