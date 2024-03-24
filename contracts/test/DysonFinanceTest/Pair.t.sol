@@ -5,16 +5,17 @@ import "dyson_finance/src/Pair.sol";
 import "dyson_finance/src/Factory.sol";
 import "dyson_finance/src/DYSON.sol";
 import "dyson_finance/src/test/TestUtils.sol";
-import {TransientToken} from "../../src/TransientToken.sol";
 
 contract PairTest is TestUtils {
-    // on Sepolia
     address testOwner = address(this);
-    TransientToken token0 = TransientToken(0x5a38BB9D84fEBf451c18282767BB11119B1CAD19);
-    TransientToken token1 = TransientToken(0xfcD57f579733a96C97608D6c7FF3a93151f4Cf0E);
-
-    Factory sepolia_Factory = IFactory(0xb56b317345Be4757FeccaA08DbF82A82850Ff978);
-    Pair pair = Pair(factory.createPair(address(token0), address(token1)));
+    // address token0 = address(new DYSON(testOwner));
+    // address token1 = address(new DYSON(testOwner));
+    address token0 = 0x5a38BB9D84fEBf451c18282767BB11119B1CAD19;
+    address token1 = 0xfcD57f579733a96C97608D6c7FF3a93151f4Cf0E;
+    // Factory factory = new Factory(testOwner);
+    Factory factory = Factory(0x53A314aABaa8e8460D708EDdD0Ef97f9AC32dD5E);
+    // Pair pair = Pair(factory.createPair(token0, token1));
+    Pair pair = Pair(0x98F32F52385a7C6d6e6CB9c35be3b66f78c48864);
 
     uint immutable INITIAL_LIQUIDITY_TOKEN0 = 10**24;
     uint immutable INITIAL_LIQUIDITY_TOKEN1 = 10**24;
@@ -27,22 +28,21 @@ contract PairTest is TestUtils {
 
     function setUp() public {
         // Initialize liquidity of Pair.
-        deal(address(token0), address(pair), INITIAL_LIQUIDITY_TOKEN0);
-        deal(address(token1), address(pair), INITIAL_LIQUIDITY_TOKEN1);
+        deal(token0, address(pair), INITIAL_LIQUIDITY_TOKEN0);
+        deal(token1, address(pair), INITIAL_LIQUIDITY_TOKEN1);
 
         // Initialize handy accounts for testing.
-        deal(address(token0), alice, INITIAL_WEALTH);
-        deal(address(token1), alice, INITIAL_WEALTH);
-        deal(address(token0), bob, INITIAL_WEALTH);
-        deal(address(token1), bob, INITIAL_WEALTH);
-        // approve doesn't require for transient token
-        // vm.startPrank(alice);
-        // IERC20(token0).approve(address(pair), INITIAL_WEALTH);
-        // IERC20(token1).approve(address(pair), INITIAL_WEALTH);
-        // changePrank(bob);
-        // IERC20(token0).approve(address(pair), INITIAL_WEALTH);
-        // IERC20(token1).approve(address(pair), INITIAL_WEALTH);
-        // vm.stopPrank();
+        deal(token0, alice, INITIAL_WEALTH);
+        deal(token1, alice, INITIAL_WEALTH);
+        deal(token0, bob, INITIAL_WEALTH);
+        deal(token1, bob, INITIAL_WEALTH);
+        vm.startPrank(alice);
+        IERC20(token0).approve(address(pair), INITIAL_WEALTH);
+        IERC20(token1).approve(address(pair), INITIAL_WEALTH);
+        changePrank(bob);
+        IERC20(token0).approve(address(pair), INITIAL_WEALTH);
+        IERC20(token1).approve(address(pair), INITIAL_WEALTH);
+        vm.stopPrank();
     }
 
     function testCannotDepositIfSlippageTooHigh() public {

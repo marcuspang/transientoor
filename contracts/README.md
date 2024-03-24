@@ -1,66 +1,34 @@
-## Foundry
+# Contracts
+Built using Foundry. 
+(PS: Uniswap tests are in `test/integration-tests/`, which uses Hardhat)
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Dev
 
-Foundry consists of:
-
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
+### Setup
+1. `forge install`
+2. `forge build`
 
 ### Deploy
+1. `forge script scripts/<DeployScriptPath>:<DeployContractName> --rpc-url <RPC_URL> --broadcast --verify --etherscan-api-key <API_KEY> -vvvv`
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
+### Test
+1. `forge test --match-path /test/<TestFile> `
 
-### Cast
+### EVM & Solidity version
+Transient token uses `tload` and `tstore` opcode, which is introduced after Dencun hardfork. Hence, EVM version need to set to "cancun" and Solidity version need to be 0.8.25.
+Add `FOUNDRY_PROFILE=main` prefix before the forge cli command to compile in v0.8.25.
 
-```shell
-$ cast <subcommand>
-```
+## Contracts
+1. `/src`: TransientNFT.sol and TransientToken.sol.
 
-### Help
+## Scripts
+1. `/scripts`: Includes Deploy script for Transient tokens, and DysonFinance script.
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+## Test 
+1. `/DysonFinanceTest`: in Pair.t.sol, Unit test for transient token pair is provided. Please add `--fork-url <SEPOLIA_RPC_URL>` when running the test. The test need to be compiled in v0.8.17.
+2. Other test is compiled in 0.8.25.
+
+
+# Deployment
+
+Check out [Deployment](./Deployment.md)
