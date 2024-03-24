@@ -36,8 +36,8 @@ Check out [Deployment](./Deployment.md)
 # Gas report
 ## Transient Token (ERC20)
 1. Normal transferFrom(approve + transferFrom) = 109897 wei
-2. Transient transferFrom (transferFrom) = 59626 wei
-Reduce by 45.74%
+2. Transient transferFrom (transferFrom) = 59626 wei    
+**Reduce by 45.74%**
 
 
 | src/TransientToken.sol:TransientToken contract |                 |       |        |       |         |
@@ -57,8 +57,9 @@ Reduce by 45.74%
 
 ## Transient NFT (ERC721)
 1. Normal transferFrom(approve + transferFrom) = 116337 wei
-2. Transient transferFrom = 67318 wei
-Reduce by 42.15% 
+2. Transient transferFrom = 67318 wei    
+**Reduce by 42.15%** 
+
 | src/TransientNFT.sol:TransientNFT contract |                 |        |        |        |         |
 |--------------------------------------------|-----------------|--------|--------|--------|---------|
 | Deployment Cost                            | Deployment Size |        |        |        |         |
