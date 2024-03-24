@@ -1,6 +1,7 @@
 import { defineConfig } from "@wagmi/cli";
 import { react } from "@wagmi/cli/plugins";
 import { erc20Abi, erc721Abi } from "viem";
+import transientNftAbi from "./src/abi/TransientNFT";
 
 export default defineConfig({
   out: "src/lib/generated.ts",
@@ -12,6 +13,10 @@ export default defineConfig({
     {
       name: "erc721",
       abi: erc721Abi,
+    },
+    {
+      name: "TransientNFT",
+      abi: transientNftAbi,
     },
   ],
   plugins: [react()],

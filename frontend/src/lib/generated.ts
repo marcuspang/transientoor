@@ -6,6 +6,251 @@ import {
 } from 'wagmi/codegen'
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TransientNFT
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const transientNftAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'symbol', internalType: 'string', type: 'string' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256[]', type: 'uint256[]' }],
+    name: 'claimBackNFT',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getApproved',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'lender', internalType: 'address', type: 'address' }],
+    name: 'getLendingDeals',
+    outputs: [
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: '', internalType: 'bool[]', type: 'bool[]' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getSpender',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'operator', internalType: 'address', type: 'address' },
+    ],
+    name: 'isApprovedForAll',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'borrower', internalType: 'address[]', type: 'address[]' },
+      { name: 'tokenId', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'lendingDuration', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    name: 'lend',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'mint',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'ownerOf',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'operator', internalType: 'address', type: 'address' },
+      { name: 'approved', internalType: 'bool', type: 'bool' },
+    ],
+    name: 'setApprovalForAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'setSpender',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'supportsInterface',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'tokenURI',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'approved',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'operator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      { name: 'approved', internalType: 'bool', type: 'bool', indexed: false },
+    ],
+    name: 'ApprovalForAll',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Transfer',
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // erc20
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -273,6 +518,284 @@ export const erc721Abi = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link transientNftAbi}__
+ */
+export const useReadTransientNft = /*#__PURE__*/ createUseReadContract({
+  abi: transientNftAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"balanceOf"`
+ */
+export const useReadTransientNftBalanceOf = /*#__PURE__*/ createUseReadContract(
+  { abi: transientNftAbi, functionName: 'balanceOf' },
+)
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"getApproved"`
+ */
+export const useReadTransientNftGetApproved =
+  /*#__PURE__*/ createUseReadContract({
+    abi: transientNftAbi,
+    functionName: 'getApproved',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"getLendingDeals"`
+ */
+export const useReadTransientNftGetLendingDeals =
+  /*#__PURE__*/ createUseReadContract({
+    abi: transientNftAbi,
+    functionName: 'getLendingDeals',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"getSpender"`
+ */
+export const useReadTransientNftGetSpender =
+  /*#__PURE__*/ createUseReadContract({
+    abi: transientNftAbi,
+    functionName: 'getSpender',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"isApprovedForAll"`
+ */
+export const useReadTransientNftIsApprovedForAll =
+  /*#__PURE__*/ createUseReadContract({
+    abi: transientNftAbi,
+    functionName: 'isApprovedForAll',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"name"`
+ */
+export const useReadTransientNftName = /*#__PURE__*/ createUseReadContract({
+  abi: transientNftAbi,
+  functionName: 'name',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"ownerOf"`
+ */
+export const useReadTransientNftOwnerOf = /*#__PURE__*/ createUseReadContract({
+  abi: transientNftAbi,
+  functionName: 'ownerOf',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"supportsInterface"`
+ */
+export const useReadTransientNftSupportsInterface =
+  /*#__PURE__*/ createUseReadContract({
+    abi: transientNftAbi,
+    functionName: 'supportsInterface',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"symbol"`
+ */
+export const useReadTransientNftSymbol = /*#__PURE__*/ createUseReadContract({
+  abi: transientNftAbi,
+  functionName: 'symbol',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"tokenURI"`
+ */
+export const useReadTransientNftTokenUri = /*#__PURE__*/ createUseReadContract({
+  abi: transientNftAbi,
+  functionName: 'tokenURI',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link transientNftAbi}__
+ */
+export const useWriteTransientNft = /*#__PURE__*/ createUseWriteContract({
+  abi: transientNftAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"approve"`
+ */
+export const useWriteTransientNftApprove = /*#__PURE__*/ createUseWriteContract(
+  { abi: transientNftAbi, functionName: 'approve' },
+)
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"claimBackNFT"`
+ */
+export const useWriteTransientNftClaimBackNft =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: transientNftAbi,
+    functionName: 'claimBackNFT',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"lend"`
+ */
+export const useWriteTransientNftLend = /*#__PURE__*/ createUseWriteContract({
+  abi: transientNftAbi,
+  functionName: 'lend',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"mint"`
+ */
+export const useWriteTransientNftMint = /*#__PURE__*/ createUseWriteContract({
+  abi: transientNftAbi,
+  functionName: 'mint',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"safeTransferFrom"`
+ */
+export const useWriteTransientNftSafeTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: transientNftAbi,
+    functionName: 'safeTransferFrom',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"setApprovalForAll"`
+ */
+export const useWriteTransientNftSetApprovalForAll =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: transientNftAbi,
+    functionName: 'setApprovalForAll',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"setSpender"`
+ */
+export const useWriteTransientNftSetSpender =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: transientNftAbi,
+    functionName: 'setSpender',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useWriteTransientNftTransferFrom =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: transientNftAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link transientNftAbi}__
+ */
+export const useSimulateTransientNft = /*#__PURE__*/ createUseSimulateContract({
+  abi: transientNftAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateTransientNftApprove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: transientNftAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"claimBackNFT"`
+ */
+export const useSimulateTransientNftClaimBackNft =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: transientNftAbi,
+    functionName: 'claimBackNFT',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"lend"`
+ */
+export const useSimulateTransientNftLend =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: transientNftAbi,
+    functionName: 'lend',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"mint"`
+ */
+export const useSimulateTransientNftMint =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: transientNftAbi,
+    functionName: 'mint',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"safeTransferFrom"`
+ */
+export const useSimulateTransientNftSafeTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: transientNftAbi,
+    functionName: 'safeTransferFrom',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"setApprovalForAll"`
+ */
+export const useSimulateTransientNftSetApprovalForAll =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: transientNftAbi,
+    functionName: 'setApprovalForAll',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"setSpender"`
+ */
+export const useSimulateTransientNftSetSpender =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: transientNftAbi,
+    functionName: 'setSpender',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link transientNftAbi}__ and `functionName` set to `"transferFrom"`
+ */
+export const useSimulateTransientNftTransferFrom =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: transientNftAbi,
+    functionName: 'transferFrom',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link transientNftAbi}__
+ */
+export const useWatchTransientNftEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: transientNftAbi })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link transientNftAbi}__ and `eventName` set to `"Approval"`
+ */
+export const useWatchTransientNftApprovalEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: transientNftAbi,
+    eventName: 'Approval',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link transientNftAbi}__ and `eventName` set to `"ApprovalForAll"`
+ */
+export const useWatchTransientNftApprovalForAllEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: transientNftAbi,
+    eventName: 'ApprovalForAll',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link transientNftAbi}__ and `eventName` set to `"Transfer"`
+ */
+export const useWatchTransientNftTransferEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: transientNftAbi,
+    eventName: 'Transfer',
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link erc20Abi}__
