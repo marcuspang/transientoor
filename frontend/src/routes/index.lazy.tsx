@@ -16,8 +16,8 @@ import { useQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Network, Nft } from "alchemy-sdk";
 import { useEffect, useState } from "react";
-import { Address, isAddress } from "viem";
-import { mainnet, sepolia } from "viem/chains";
+import { Address, Chain, isAddress } from "viem";
+import { mainnet, optimism, optimismSepolia, sepolia } from "viem/chains";
 import { useAccount } from "wagmi";
 import { getUserNfts } from "../lib/alchemy";
 
@@ -43,6 +43,21 @@ function getNftName(nft: Nft) {
   return nft.contract.name ?? nft.contract.symbol ?? nft.contract.address;
 }
 
+function getAlchemyNetwork(chainId: Chain["id"]) {
+  switch (chainId) {
+    case mainnet.id:
+      return Network.ETH_MAINNET;
+    case sepolia.id:
+      return Network.ETH_SEPOLIA;
+    case optimism.id:
+      return Network.OPT_MAINNET;
+    case optimismSepolia.id:
+      return Network.OPT_SEPOLIA;
+    default:
+      throw new Error(`Unsupported chain ${chainId}`);
+  }
+}
+
 export function Index() {
   const { address, chainId } = useAccount();
   const [selectedNft, setSelectedNft] = useState<Nft>();
@@ -55,13 +70,11 @@ export function Index() {
     fetchStatus: nftsIsFetching,
   } = useQuery({
     queryKey: ["nfts", fromAddress],
-    queryFn: () =>
-      getUserNfts(
-        fromAddress!,
-        chainId === mainnet.id ? Network.ETH_MAINNET : Network.ETH_SEPOLIA
-      ),
+    queryFn: () => getUserNfts(fromAddress!, getAlchemyNetwork(chainId!)),
     enabled:
-      fromAddress !== undefined && isAddress(fromAddress, { strict: false }),
+      fromAddress !== undefined &&
+      isAddress(fromAddress, { strict: false }) &&
+      chainId !== undefined,
   });
   const { data: lendingDeals } = useReadTransientNftGetLendingDeals({
     chainId: chainId as typeof mainnet.id | typeof sepolia.id,
