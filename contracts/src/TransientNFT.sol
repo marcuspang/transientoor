@@ -6,12 +6,13 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 contract TransientNFT is ERC721 {
     uint256 LendingPeriod = 1; // 1 block
 
-    struct LendDeal{
+    struct LendDeal {
         uint256[] expiredDate;
         uint256[] tokenId;
         bool[] hasClaimed;
     }
-    mapping(address owner=>LendDeal lendDeal) LendingDeals;
+
+    mapping(address owner => LendDeal lendDeal) LendingDeals;
 
     // Mapping from token ID to approved address
     // mapping(uint256 => address) private _tokenApprovals; slot 4
@@ -58,44 +59,44 @@ contract TransientNFT is ERC721 {
     }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-    _requireMinted(tokenId);
+        _requireMinted(tokenId);
 
-    string memory baseURI = _baseURI();
-    return string(abi.encodePacked(baseURI));
-}
+        string memory baseURI = _baseURI();
+        return string(abi.encodePacked(baseURI));
+    }
 
+    function lend(address[] calldata borrower, uint256[] calldata tokenId, uint256[] calldata lendingDuration) public {
+        require(borrower.length == tokenId.length, "mismatch array length!");
 
-    function lend(address[] calldata borrower, uint256[] calldata tokenId) public {
-        require(borrower.length==tokenId.length, "mismatch array length!");
-        
-        for(uint256 i=0; i<borrower.length; i++){
-            require(ownerOf(tokenId[i])==msg.sender, "msg.sender is not owner of token");
-            LendingDeals[msg.sender].expiredDate.push(block.timestamp + LendingPeriod);
+        for (uint256 i = 0; i < borrower.length; i++) {
+            require(ownerOf(tokenId[i]) == msg.sender, "msg.sender is not owner of token");
+            LendingDeals[msg.sender].expiredDate.push(block.timestamp + lendingDuration[i]);
             LendingDeals[msg.sender].tokenId.push(tokenId[i]);
             LendingDeals[msg.sender].hasClaimed.push(false);
-            transferFrom(msg.sender,borrower[i], tokenId[i]);
+            transferFrom(msg.sender, borrower[i], tokenId[i]);
         }
     }
 
-
     function claimBackNFT(uint256[] calldata tokenId) public {
-        require(LendingDeals[msg.sender].tokenId.length!=0 && LendingDeals[msg.sender].tokenId.length>=tokenId.length, "no token to claim back from borrower");
-        for(uint256 i=0; i<tokenId.length; i++){
-            for(uint256 j=0; j<LendingDeals[msg.sender].tokenId.length; j++){
-                if(tokenId[i]==LendingDeals[msg.sender].tokenId[j]){
+        require(
+            LendingDeals[msg.sender].tokenId.length != 0 && LendingDeals[msg.sender].tokenId.length >= tokenId.length,
+            "no token to claim back from borrower"
+        );
+        for (uint256 i = 0; i < tokenId.length; i++) {
+            for (uint256 j = 0; j < LendingDeals[msg.sender].tokenId.length; j++) {
+                if (tokenId[i] == LendingDeals[msg.sender].tokenId[j]) {
                     // found matching tokenId, claim back NFT
                     require(block.timestamp >= LendingDeals[msg.sender].expiredDate[j], "have not reached expiry date");
-                    transferFrom(ownerOf(tokenId[i]),msg.sender, tokenId[i]);
-                    LendingDeals[msg.sender].expiredDate[j] = 0;    
+                    transferFrom(ownerOf(tokenId[i]), msg.sender, tokenId[i]);
+                    LendingDeals[msg.sender].expiredDate[j] = 0;
                     LendingDeals[msg.sender].hasClaimed[j] = true;
                 }
             }
-         
         }
     }
 
-    function getLendingDeals(address lender) public returns(uint256[] memory, uint256[] memory, bool[] memory){
+    function getLendingDeals(address lender) public view returns (uint256[] memory, uint256[] memory, bool[] memory) {
         LendDeal memory lenderDeal = LendingDeals[lender];
-        return(lenderDeal.expiredDate, lenderDeal.tokenId, lenderDeal.hasClaimed);
+        return (lenderDeal.expiredDate, lenderDeal.tokenId, lenderDeal.hasClaimed);
     }
 }

@@ -11,48 +11,49 @@ contract TransientTokenTest is Test {
     address operator;
 
     function setUp() public {
-        transientNFT = new TransientNFT("TransientNFT","TFT");
+        transientNFT = new TransientNFT("TransientNFT", "TFT");
         alice = makeAddr("alice");
         bob = makeAddr("bob");
         operator = makeAddr("operator");
-        transientNFT.mint(alice,1);
-    }   
+        transientNFT.mint(alice, 1);
+    }
 
     function test_transferfrom() public {
         vm.prank(operator);
-        transientNFT.transferFrom(alice,bob,1);
-
+        transientNFT.transferFrom(alice, bob, 1);
     }
 
     function test_safeTransferFrom() public {
         vm.prank(operator);
-        transientNFT.safeTransferFrom(alice,bob,1,"");
+        transientNFT.safeTransferFrom(alice, bob, 1, "");
     }
 
     function test_lend() public {
         address[] memory borrower = new address[](1);
         borrower[0] = bob;
         uint256[] memory tokenId = new uint256[](1);
-        tokenId[0] =1;
+        tokenId[0] = 1;
+        uint256[] memory expiredDate = new uint256[](1);
         vm.prank(alice);
-        transientNFT.lend(borrower, tokenId);
+        transientNFT.lend(borrower, tokenId, expiredDate);
 
-        assertEq(transientNFT.ownerOf(1),bob);
+        assertEq(transientNFT.ownerOf(1), bob);
     }
 
     function test_claimbackNFT() public {
-          address[] memory borrower = new address[](1);
+        address[] memory borrower = new address[](1);
         borrower[0] = bob;
         uint256[] memory tokenId = new uint256[](1);
-        tokenId[0] =1;
+        tokenId[0] = 1;
+        uint256[] memory expiredDate = new uint256[](1);
+        expiredDate[0] = 1;
         vm.prank(alice);
-        transientNFT.lend(borrower, tokenId);
-        assertEq(transientNFT.ownerOf(1),bob);
+        transientNFT.lend(borrower, tokenId, expiredDate);
+        assertEq(transientNFT.ownerOf(1), bob);
 
         vm.warp(block.timestamp);
         vm.expectRevert();
 
-         
         vm.prank(alice);
         transientNFT.claimBackNFT(tokenId);
 
@@ -60,7 +61,6 @@ contract TransientTokenTest is Test {
         vm.prank(alice);
         transientNFT.claimBackNFT(tokenId);
 
-        assertEq(transientNFT.ownerOf(1),alice);
+        assertEq(transientNFT.ownerOf(1), alice);
     }
-
 }
