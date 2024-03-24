@@ -1,7 +1,8 @@
 # ![Logo](./frontend/public/icon.svg) Transientoor
 
-Taikai Link: https://taikai.network/ethtaipei/hackathons/hackathon-2024/projects/clu2qlohy0i89y501lw00th07/idea
-Project Video: https://www.loom.com/share/1752952cc20a4a42b8eb8726be4ee9d0?sid=b8887a4d-ccdd-4d9d-86b3-06367ec30911
+[Taikai Link](https://taikai.network/ethtaipei/hackathons/hackathon-2024/projects/clu2qlohy0i89y501lw00th07/idea)
+
+[Project Video](https://www.loom.com/share/1752952cc20a4a42b8eb8726be4ee9d0?sid=b8887a4d-ccdd-4d9d-86b3-06367ec30911)
 
 ## Understanding EIP-1153
 
@@ -36,6 +37,7 @@ We've deployed a [transient token pool](https://sepolia.etherscan.io/address/0x9
 
 ## Contract addresses
 
-[x] Sepolia
-[x] Optimism-Sepolia
+- [x] Sepolia
+- [x] Optimism-Sepolia
+
 Check out all the deployments [here](./contracts//Deployment.md)
