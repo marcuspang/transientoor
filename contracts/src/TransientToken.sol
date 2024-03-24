@@ -52,4 +52,14 @@ contract TransientToken is ERC20 {
 
         return true;
     }
+    function normalTransferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) public  returns (bool) {
+        address spender = _msgSender();
+        _spendAllowance(from, spender, amount);
+        _transfer(from, to, amount);
+        return true;
+    }
 }

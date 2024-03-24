@@ -28,6 +28,17 @@ contract TransientTokenTest is Test {
         transientNFT.safeTransferFrom(alice, bob, 1, "");
     }
 
+    function test_normalTransferFrom() public {
+        vm.prank(alice);
+        transientNFT.approve(operator,1);
+        assertEq(transientNFT.ownerOf(1),alice);
+        
+        vm.prank(operator);
+        transientNFT.normalTransferFrom(alice,bob,1);
+        assertEq(transientNFT.ownerOf(1),bob);
+    }
+
+
     function test_lend() public {
         address[] memory borrower = new address[](1);
         borrower[0] = bob;

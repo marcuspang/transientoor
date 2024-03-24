@@ -53,6 +53,17 @@ contract TransientNFT is ERC721 {
         setSpender(from, to, tokenId);
         _safeTransfer(from, to, tokenId, data);
     }
+    
+    function normalTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public  {
+        //solhint-disable-next-line max-line-length
+        require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner nor approved");
+
+        _transfer(from, to, tokenId);
+    }
 
     function _baseURI() internal view override returns (string memory) {
         return "ipfs://QmVUEyJpt6BjmV7dinm3wHxAaw8hXRZkxtRomsNV1b5xKj";

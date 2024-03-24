@@ -10,6 +10,3 @@
 [submodule "contracts/lib/universal-router"]
 	path = contracts/lib/universal-router
 	url = https://github.com/uniswap/universal-router
-[submodule "contracts/lib/Dyson-Finance-V1"]
-	path = contracts/lib/Dyson-Finance-V1
-	url = https://github.com/DysonFinance/Dyson-Finance-V1
