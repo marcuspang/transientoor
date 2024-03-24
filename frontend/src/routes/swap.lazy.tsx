@@ -6,8 +6,10 @@ export const Route = createLazyFileRoute("/swap")({
 
 export function Swap() {
   return (
-    <div className="px-12 py-6">
-      <h1>Swap ERC20s without needing approvals</h1>
+    <div className="px-12 py-4">
+      <h1 className="font-bold tracking-tight text-2xl underline">
+        Swap ERC20s without needing approvals
+      </h1>
       <p className="py-4">
         To try this out, we have created an extension that modifies Uniswap's
         frontend, where you can swap immediately without approval. However, due
