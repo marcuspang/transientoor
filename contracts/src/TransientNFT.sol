@@ -4,7 +4,7 @@ pragma solidity 0.8.25;
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract TransientNFT is ERC721 {
-    uint256 LendingPeriod = 14 days;
+    uint256 LendingPeriod = 1; // 1 block
 
     struct LendDeal{
         uint256[] expiredDate;
@@ -92,5 +92,10 @@ contract TransientNFT is ERC721 {
             }
          
         }
+    }
+
+    function getLendingDeals(address lender) public returns(uint256[] memory, uint256[] memory, bool[] memory){
+        LendDeal memory lenderDeal = LendingDeals[lender];
+        return(lenderDeal.expiredDate, lenderDeal.tokenId, lenderDeal.hasClaimed);
     }
 }

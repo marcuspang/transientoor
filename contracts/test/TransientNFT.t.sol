@@ -49,14 +49,14 @@ contract TransientTokenTest is Test {
         transientNFT.lend(borrower, tokenId);
         assertEq(transientNFT.ownerOf(1),bob);
 
-        vm.warp(block.timestamp + 1 days);
+        vm.warp(block.timestamp);
         vm.expectRevert();
 
          
         vm.prank(alice);
         transientNFT.claimBackNFT(tokenId);
 
-        vm.warp(block.timestamp + 14 days);
+        vm.warp(block.timestamp + 1);
         vm.prank(alice);
         transientNFT.claimBackNFT(tokenId);
 
