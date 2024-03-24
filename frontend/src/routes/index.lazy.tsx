@@ -189,7 +189,7 @@ export function Index() {
                       Expiry date:{" "}
                       {new Date(
                         +(lendingDeal.expiryDate * 1000n).toString()
-                      ).toLocaleDateString()}
+                      ).toLocaleString()}
                     </p>
                     <p>Token ID: {lendingDeal.tokenId.toString()}</p>
                   </li>
