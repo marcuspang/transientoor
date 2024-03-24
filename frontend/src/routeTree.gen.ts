@@ -17,6 +17,7 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const SwapLazyImport = createFileRoute('/swap')()
+const DysonLazyImport = createFileRoute('/dyson')()
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
 
@@ -26,6 +27,11 @@ const SwapLazyRoute = SwapLazyImport.update({
   path: '/swap',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/swap.lazy').then((d) => d.Route))
+
+const DysonLazyRoute = DysonLazyImport.update({
+  path: '/dyson',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/dyson.lazy').then((d) => d.Route))
 
 const AboutLazyRoute = AboutLazyImport.update({
   path: '/about',
@@ -49,6 +55,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
+    '/dyson': {
+      preLoaderRoute: typeof DysonLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/swap': {
       preLoaderRoute: typeof SwapLazyImport
       parentRoute: typeof rootRoute
@@ -61,6 +71,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   AboutLazyRoute,
+  DysonLazyRoute,
   SwapLazyRoute,
 ])
 
